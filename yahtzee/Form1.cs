@@ -105,6 +105,7 @@ namespace yahtzee
                         item.Enabled = true;
                     }
                 }
+                allDice.Clear();
                 rerollsLeft += -1;
                 
             }
@@ -380,7 +381,7 @@ namespace yahtzee
             allDice.Add(button5);
             foreach (var item in allDice)
             {
-                item.BackColor = Color.Green;
+                item.BackColor = Color.Red;
             }
         }
         //

@@ -63,8 +63,8 @@
             this.boxYahtzee = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
             this.reset = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
             this.rolls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,7 +94,7 @@
             // 
             // button5
             // 
-            this.button5.BackColor = System.Drawing.Color.ForestGreen;
+            this.button5.BackColor = System.Drawing.Color.Red;
             this.button5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5.Location = new System.Drawing.Point(337, 19);
             this.button5.Name = "button5";
@@ -107,7 +107,7 @@
             // 
             // button4
             // 
-            this.button4.BackColor = System.Drawing.Color.ForestGreen;
+            this.button4.BackColor = System.Drawing.Color.Red;
             this.button4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.Location = new System.Drawing.Point(259, 19);
             this.button4.Name = "button4";
@@ -120,7 +120,7 @@
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.ForestGreen;
+            this.button3.BackColor = System.Drawing.Color.Red;
             this.button3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Location = new System.Drawing.Point(182, 19);
             this.button3.Name = "button3";
@@ -133,7 +133,7 @@
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.ForestGreen;
+            this.button2.BackColor = System.Drawing.Color.Red;
             this.button2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(104, 19);
             this.button2.Name = "button2";
@@ -146,7 +146,7 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.ForestGreen;
+            this.button1.BackColor = System.Drawing.Color.Red;
             this.button1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(25, 19);
             this.button1.Name = "button1";
@@ -412,16 +412,6 @@
             this.label15.Text = "rolls: 3";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.ForeColor = System.Drawing.Color.Red;
-            this.label16.Location = new System.Drawing.Point(12, 424);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(186, 17);
-            this.label16.TabIndex = 30;
-            this.label16.Text = "only green dice will be rolled";
-            // 
             // reset
             // 
             this.reset.Enabled = false;
@@ -434,13 +424,22 @@
             this.reset.Visible = false;
             this.reset.Click += new System.EventHandler(this.reset_Click);
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(12, 424);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(199, 17);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "pick the dice you want to reroll";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.reset);
             this.Controls.Add(this.label16);
+            this.Controls.Add(this.reset);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.boxYahtzee);
@@ -517,8 +516,8 @@
         private System.Windows.Forms.TextBox boxYahtzee;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button reset;
+        private System.Windows.Forms.Label label16;
     }
 }
 
