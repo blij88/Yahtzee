@@ -15,9 +15,9 @@ namespace yahtzee
         select Dice []
         check amount of rolls []
         reroll selected Dice []
-        assign dice to "block" []
-        select relevant dice for a block[]
-        calculate score []
+        assign dice to "block" [v]
+        select relevant dice for a block[v]
+        calculate score [v]
         reset game []
     */
     public partial class Form1 : Form
@@ -26,30 +26,53 @@ namespace yahtzee
         {
             InitializeComponent();
         }
+
+        // this is stuff that is at least easier to initialize outside of the eventlisteners and methods, I feel like this is not the way to do this but here we are
+
+        // the random used for all rolls
         Random rand = new Random();
+
+        // this list is for the buttons that represent the different dice
         List<Button> allDice = new List<Button>();
+        // this keeps the values for a single set of rolls
         List<int> diceValues = new List<int>();
+        // totals score for easy addition
         int totalScore = 0;
+        // keeping track of amount of blocks that have been filled
+        int amountFilled = 0;
+        // how often we are allowed to roll for this block
+        int rerollsLeft = 3;
+        
         //adding the hidden buttons to a list so I can easily connect them to a single roll
         private void Form1_Load(object sender, EventArgs e)
         {
-            allDice.Add(button1);
-            allDice.Add(button2);
-            allDice.Add(button3);
-            allDice.Add(button4);
-            allDice.Add(button5);
-
+            addAllButtons();
         }
+        // when the roll is clicked the list with the values of the previous rolls is cleared, dice are rolled and added to the GUI and the diceValues string
         private void rollDice_Click(object sender, EventArgs e)
         {
-            diceValues.Clear();
-            foreach (var item in allDice)
+            if (rerollsLeft > 0)
             {
-                int roll = Dice();
-                allDice[allDice.IndexOf(item)].Text = roll.ToString();
-                diceValues.Add(roll);
-                allDice[allDice.IndexOf(item)].Visible = true;
+                diceValues.Clear();
+                foreach (var item in allDice)
+                {
+                    int roll = Dice();
+                    allDice[allDice.IndexOf(item)].Text = roll.ToString();
+                    item.Visible = true;
+                }
+                addAllButtons();
+                foreach (var item in allDice)
+                {
+                    diceValues.Add(Int32.Parse(item.Text));
+                }
+                rerollsLeft += -1;
+                
             }
+            else
+            {
+                rerollsLeft = 0;
+            }
+            label15.Text = "rolls: " + rerollsLeft;
         }
 // the random generator
         public int Dice()
@@ -59,18 +82,54 @@ namespace yahtzee
             return newRoll;
          }
 // transfer dice values to the different blocks
-        public void setValues(TextBox chosen)
+        public void setValues(TextBox chosen, int score)
         {
+            chosen.Text = ($"{diceValues[0]}, {diceValues[1]}, {diceValues[2]}, {diceValues[3]}, {diceValues[4]}|  Score: {score}");
+
+            amountFilled += 1;
+            if (amountFilled == 13)
+            {
+                label14.Text += totalScore;
+                label14.Visible = true;
+            }
+
+        }
+// method that returns an array with frequencys of the different sides
+
+        public int[] getFrequencies()
+        {
+            int[] frequencies = new int[6];
+            int pos = 0;
+
+            for (int i = 1; i < 7; i++)
+            {
+                int freq = 0;
+                foreach (var item in diceValues)
+                {
+                    if (item == i)
+                    {
+                        freq += 1;
+                    }
+                }
+                frequencies[pos] = freq;
+                pos += 1;
+            }
+            return frequencies;
+        }
+// method that calculates the score for a valid three or four of a kind block
+        private int ofAScore()
+        {
+            int score = 0;
             foreach (var item in diceValues)
             {
-                
-                chosen.Text += item +",";
-                chosen.Enabled = false;
+                score += item;
             }
+            return score;
         }
-        // score calculation for left column
-        public void scoreOfLeftColumn(TextBox chosen, int numberType)
+// score calculation for left column
+        public int scoreOfLeftColumn(int numberType)
         {
+            addAllButtons();
             int score = 0;
             foreach (var item in diceValues)
             {
@@ -79,70 +138,40 @@ namespace yahtzee
                     score += numberType;
                 }
             }
-            chosen.Text += "    score: " + score;
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
             totalScore += score;
+            return score;
         }
-// score for the three and four of a kind
-        public void ofAKind(TextBox chosen, int howMany)
+// score for the three and four of a kind, references getFrequencies and ofAScore
+        public int ofAKind(int howMany)
         {
-
+            addAllButtons();
             int score = 0;
-            for (int i = 1; i < 7; i++)
-            {   
-                int thisMany = 0;
-                foreach (var item in diceValues)
-                {
-    
-                    if (i == item)
-                    {
-                        thisMany += 1;
-                        Console.WriteLine(thisMany.ToString() + "," + item);
-                    }
-                }
-                if (thisMany >= howMany)
-                {
-                    foreach (var item in diceValues)
-                    {
-                        score += item;
-                    }
-                    break;
-                }
-            }
-            chosen.Text += "    score: " + score;
-
-        }
-// score for yahtzee
-        public void Yahtzee(TextBox chosen)
-        {
-
-            int score = 0;
-            for (int i = 1; i < 7; i++)
+            int[] frequencies = getFrequencies();
+            Array.Sort(frequencies);
+            if (frequencies[5] >= howMany)
             {
-                int thisMany = 0;
-                foreach (var item in diceValues)
+                if (howMany == 5)
                 {
-
-                    if (i == item)
-                    {
-                        thisMany += 1;
-                        Console.WriteLine(thisMany.ToString() + "," + item);
-                    }
+                    score = 50;
                 }
-                if (thisMany >= 6)
+                else
                 {
-                    foreach (var item in diceValues)
-                    {
-                        score = 50;
-                    }
-                    break;
+                    score = ofAScore();
                 }
             }
-            chosen.Text += "    score: " + score;
-       }
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            totalScore += score;
+            return score;
+        }
+
 
 // score for straights
-        public void isStraight()
+        public int isStraight()
         {
+            addAllButtons();
             int score = 0;
             if (diceValues.Contains(3) && diceValues.Contains(4))
             {
@@ -158,11 +187,15 @@ namespace yahtzee
                     score = 30;
                 }
             }
-            boxStraight.Text += "   score: " + score;
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            totalScore += score;
+            return score;
         }
         // score for straight flush
-        public void isStraightFlush()
+        public int isStraightFlush()
         {
+            addAllButtons();
             int score = 0;
             if (diceValues.Contains(2) && diceValues.Contains(3) && diceValues.Contains(4) && diceValues.Contains(5))
             {
@@ -171,101 +204,179 @@ namespace yahtzee
                     score = 40;
                 }
             }
-            boxStraighFlush.Text += "   score: " + score;
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            totalScore += score;
+            return score;
         }
 
         // score for full house
 
-
-        private void label5_Click(object sender, EventArgs e)
+        public int isFullHouse()
         {
-
+            addAllButtons();
+            int score = 0;
+            int[] frequencies = getFrequencies();
+            if ((frequencies.Contains(3) && frequencies.Contains(2)) || (frequencies.Contains(5) && boxYahtzee.Visible == false))
+            {
+                score = 25;
+            }
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            totalScore += score;
+            return score;
+        }
+        // score for chance
+        public int scoreChance()
+        {
+            addAllButtons();
+            int score = 0;
+            foreach (var item in diceValues)
+            {
+                score += item;
+            }
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            totalScore += score;
+            return score;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         // the click events for the different boxes
 
         private void boxOnes_Click(object sender, EventArgs e)
         {
-            setValues(boxOnes);
-            scoreOfLeftColumn(boxOnes, 1);
+            int score =  scoreOfLeftColumn(1);
+            setValues(boxOnes,score);
         }
 
 
         private void boxTwos_Click(object sender, EventArgs e)
         {
-            setValues(boxTwos);
-            scoreOfLeftColumn(boxTwos, 2);
+            int score = scoreOfLeftColumn(2);
+            setValues(boxTwos, score);
         }
 
         private void s_Click(object sender, EventArgs e)
         {
-            setValues(s);
-            scoreOfLeftColumn(s, 3);
+            int score = scoreOfLeftColumn(3);
+            setValues(s, score);
         }
 
         private void boxFours_Click(object sender, EventArgs e)
         {
-            setValues(boxFours);
-            scoreOfLeftColumn(boxFours, 4);
+            int score = scoreOfLeftColumn(4);
+            setValues(boxFours, score);
         }
         private void boxFives_Click(object sender, EventArgs e)
         {
-            setValues(boxFives);
-            scoreOfLeftColumn(boxFives, 5);
+            int score = scoreOfLeftColumn(5);
+            setValues(boxFives, score);
         }
 
         private void boxSixes_Click(object sender, EventArgs e)
         {
-            setValues(boxSixes);
-            scoreOfLeftColumn(boxSixes, 6);
+            int score = scoreOfLeftColumn(6);
+            setValues(boxSixes, score);
         }
  
         private void boxThreeEqual_Click_1(object sender, EventArgs e)
         {
-            setValues(boxThreeEqual);
-            ofAKind(boxThreeEqual, 3);
+            int score = ofAKind(3);
+            setValues(boxThreeEqual, score);
         }
 
         private void boxFourEqual_Click(object sender, EventArgs e)
         {
-            setValues(boxFourEqual);
-            ofAKind(boxFourEqual, 4);
+            int score = ofAKind(4);
+            setValues(boxFourEqual, score);
         }
 
         private void boxStraight_Click(object sender, EventArgs e)
         {
-            setValues(boxStraight);
-            isStraight();
+            int score = isStraight();
+            setValues(boxStraight, score);
         }
 
         private void boxStraighFlush_Click(object sender, EventArgs e)
         {
-            setValues(boxStraighFlush);
-            isStraightFlush();
+            int score = isStraightFlush();
+            setValues(boxStraighFlush, score);
         }
 
         private void boxFullHouse_Click(object sender, EventArgs e)
         {
-            setValues(boxFullHouse);
+            int score = isFullHouse();
+            setValues(boxFullHouse, score);
         }
 
         private void boxChance_Click(object sender, EventArgs e)
         {
-            setValues(boxChance);
+            int score = scoreChance();
+            setValues(boxChance, score);
         }
 
         private void boxYahtzee_Click(object sender, EventArgs e)
         {
-            setValues(boxYahtzee);
-            Yahtzee(boxYahtzee);
+            int score = ofAKind(5);
+            setValues(boxYahtzee, score);
         }
 
+        // adding all buttons when at the start of a new set of rerolls
 
+        public void addAllButtons()
+        {
+            allDice.Clear();
+            allDice.Add(button1);
+            allDice.Add(button2);
+            allDice.Add(button3);
+            allDice.Add(button4);
+            allDice.Add(button5);
+            foreach (var item in allDice)
+            {
+                item.BackColor = Color.Green;
+            }
+        }
+        //
+        public void selectAndDeselect(Button chosen)
+        {
+            if (chosen.BackColor == Color.Red)
+            {
+            allDice.Add(chosen);
+            chosen.BackColor = Color.Green;
+            }
+            else
+            {
+                allDice.Remove(chosen);
+                chosen.BackColor = Color.Red;
+            }
+
+        }
+        // eventisteners to add and remove dice from reroll list
+        private void button1_Click(object sender, EventArgs e)
+        {
+            selectAndDeselect(button1);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            selectAndDeselect(button2);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            selectAndDeselect(button3);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            selectAndDeselect(button4);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            selectAndDeselect(button5);
+        }
     }
 
 }
