@@ -64,6 +64,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.reset = new System.Windows.Forms.Button();
             this.rolls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -421,11 +422,24 @@
             this.label16.TabIndex = 30;
             this.label16.Text = "only green dice will be rolled";
             // 
+            // reset
+            // 
+            this.reset.Enabled = false;
+            this.reset.Location = new System.Drawing.Point(627, 281);
+            this.reset.Name = "reset";
+            this.reset.Size = new System.Drawing.Size(136, 34);
+            this.reset.TabIndex = 31;
+            this.reset.Text = "reset";
+            this.reset.UseVisualStyleBackColor = true;
+            this.reset.Visible = false;
+            this.reset.Click += new System.EventHandler(this.reset_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.reset);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
@@ -504,6 +518,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button reset;
     }
 }
 

@@ -125,12 +125,15 @@ namespace yahtzee
         public void setValues(TextBox chosen, int score)
         {
             chosen.Text = ($"{diceValues[0]}, {diceValues[1]}, {diceValues[2]}, {diceValues[3]}, {diceValues[4]}|  Score: {score}");
-
+            resettings();
+            allboxes.Remove(chosen);
             amountFilled += 1;
             if (amountFilled == 13)
             {
-                label14.Text += totalScore;
+                label14.Text = "total: " + totalScore;
                 label14.Visible = true;
+                reset.Enabled = true;
+                reset.Visible = true;
             }
 
         }
@@ -193,7 +196,6 @@ namespace yahtzee
                     score += numberType;
                 }
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -215,7 +217,6 @@ namespace yahtzee
                     score = ofAScore();
                 }
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -240,7 +241,6 @@ namespace yahtzee
                     score = 30;
                 }
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -256,7 +256,6 @@ namespace yahtzee
                     score = 40;
                 }
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -272,7 +271,6 @@ namespace yahtzee
             {
                 score = 25;
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -285,7 +283,6 @@ namespace yahtzee
             {
                 score += item;
             }
-            resettings();
             totalScore += score;
             return score;
         }
@@ -425,6 +422,33 @@ namespace yahtzee
         private void button5_Click(object sender, EventArgs e)
         {
             selectAndDeselect(button5);
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            allboxes.Add(boxOnes);
+            allboxes.Add(boxTwos);
+            allboxes.Add(s);
+            allboxes.Add(boxFours);
+            allboxes.Add(boxFives);
+            allboxes.Add(boxSixes);
+            allboxes.Add(boxThreeEqual);
+            allboxes.Add(boxFourEqual);
+            allboxes.Add(boxStraight);
+            allboxes.Add(boxStraighFlush);
+            allboxes.Add(boxFullHouse);
+            allboxes.Add(boxChance);
+            allboxes.Add(boxYahtzee);
+            resettings();
+            foreach (var item in allboxes)
+            {
+                item.Text = "";
+            }
+            amountFilled = 0;
+            label14.Text = "";
+            label14.Visible = false;
+            reset.Visible = false;
+            reset.Enabled = false;
         }
     }
 
