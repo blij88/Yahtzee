@@ -63,6 +63,7 @@
             this.boxYahtzee = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.rolls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -410,11 +411,22 @@
             this.label15.Text = "rolls: 3";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.Red;
+            this.label16.Location = new System.Drawing.Point(12, 424);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(186, 17);
+            this.label16.TabIndex = 30;
+            this.label16.Text = "only green dice will be rolled";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.boxYahtzee);
@@ -446,7 +458,7 @@
             this.Controls.Add(this.rolls);
             this.Controls.Add(this.rollDice);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Yahtzee";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.rolls.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -491,6 +503,7 @@
         private System.Windows.Forms.TextBox boxYahtzee;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
     }
 }
 

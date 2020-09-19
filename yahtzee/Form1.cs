@@ -32,8 +32,9 @@ namespace yahtzee
         // the random used for all rolls
         Random rand = new Random();
 
-        // this list is for the buttons that represent the different dice
+        // these lists are for the buttons that represent the different dice and textboxes
         List<Button> allDice = new List<Button>();
+        List<TextBox> allboxes = new List<TextBox>();
         // this keeps the values for a single set of rolls
         List<int> diceValues = new List<int>();
         // totals score for easy addition
@@ -46,8 +47,36 @@ namespace yahtzee
         //adding the hidden buttons to a list so I can easily connect them to a single roll
         private void Form1_Load(object sender, EventArgs e)
         {
+            allboxes.Add(boxOnes);
+            allboxes.Add(boxTwos);
+            allboxes.Add(s);
+            allboxes.Add(boxFours);
+            allboxes.Add(boxFives);
+            allboxes.Add(boxSixes);
+            allboxes.Add(boxThreeEqual);
+            allboxes.Add(boxFourEqual);
+            allboxes.Add(boxStraight);
+            allboxes.Add(boxStraighFlush);
+            allboxes.Add(boxFullHouse);
+            allboxes.Add(boxChance);
+            allboxes.Add(boxYahtzee);
+            foreach (var item in allboxes)
+            {
+                item.Enabled = false;
+            }
             addAllButtons();
+            diceValues.Add(0);
+            diceValues.Add(0);
+            diceValues.Add(0);
+            diceValues.Add(0);
+            diceValues.Add(0);
+            foreach (var item in allDice)
+            {
+                item.Enabled = false;
+            }
         }
+        // all textboxes and buttons are disabled until a roll has taken place atleast once per block
+        
         // when the roll is clicked the list with the values of the previous rolls is cleared, dice are rolled and added to the GUI and the diceValues string
         private void rollDice_Click(object sender, EventArgs e)
         {
@@ -64,6 +93,17 @@ namespace yahtzee
                 foreach (var item in allDice)
                 {
                     diceValues.Add(Int32.Parse(item.Text));
+                }
+                if (rerollsLeft == 3)
+                {
+                    foreach (var item in allboxes)
+                    {
+                        item.Enabled = true;
+                    }
+                    foreach (var item in allDice)
+                    {
+                        item.Enabled = true;
+                    }
                 }
                 rerollsLeft += -1;
                 
@@ -126,6 +166,21 @@ namespace yahtzee
             }
             return score;
         }
+
+        // upon button textbox click a bunch of stuff is reset
+        public void resettings()
+        {
+            rerollsLeft = 3;
+            label15.Text = "rolls: 3";
+            foreach (var item in allDice)
+            {
+                item.Enabled = false;
+            }
+            foreach (var item in allboxes)
+            {
+                item.Enabled = false;
+            }
+        }
 // score calculation for left column
         public int scoreOfLeftColumn(int numberType)
         {
@@ -138,8 +193,7 @@ namespace yahtzee
                     score += numberType;
                 }
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -161,8 +215,7 @@ namespace yahtzee
                     score = ofAScore();
                 }
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -187,8 +240,7 @@ namespace yahtzee
                     score = 30;
                 }
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -204,8 +256,7 @@ namespace yahtzee
                     score = 40;
                 }
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -221,8 +272,7 @@ namespace yahtzee
             {
                 score = 25;
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -235,8 +285,7 @@ namespace yahtzee
             {
                 score += item;
             }
-            rerollsLeft = 3;
-            label15.Text = "rolls: 3";
+            resettings();
             totalScore += score;
             return score;
         }
@@ -340,15 +389,15 @@ namespace yahtzee
         //
         public void selectAndDeselect(Button chosen)
         {
-            if (chosen.BackColor == Color.Red)
-            {
-            allDice.Add(chosen);
-            chosen.BackColor = Color.Green;
-            }
-            else
+            if (allDice.Contains(chosen))
             {
                 allDice.Remove(chosen);
                 chosen.BackColor = Color.Red;
+            }
+            else
+            {
+                allDice.Add(chosen);
+                chosen.BackColor = Color.Green;
             }
 
         }
