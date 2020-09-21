@@ -171,7 +171,7 @@ namespace yahtzee
             return score;
         }
 
-        // upon button textbox click a bunch of stuff is reset
+        // upon textbox click a bunch of stuff is reset
         public void resettings()
         {
             rerollsLeft = 3;
@@ -179,6 +179,7 @@ namespace yahtzee
             foreach (var item in allDice)
             {
                 item.Enabled = false;
+                item.Visible = false;
             }
             foreach (var item in allboxes)
             {
@@ -381,7 +382,8 @@ namespace yahtzee
             allDice.Add(button5);
             foreach (var item in allDice)
             {
-                item.BackColor = Color.Red;
+                item.BackColor = Color.Black;
+                item.ForeColor = Color.White;
             }
         }
         //
@@ -390,12 +392,14 @@ namespace yahtzee
             if (allDice.Contains(chosen))
             {
                 allDice.Remove(chosen);
-                chosen.BackColor = Color.Red;
+                chosen.BackColor = Color.Black;
+                chosen.ForeColor = Color.White;
             }
             else
             {
                 allDice.Add(chosen);
-                chosen.BackColor = Color.Green;
+                chosen.BackColor = Color.White;
+                chosen.ForeColor = Color.Black;
             }
 
         }
@@ -450,6 +454,7 @@ namespace yahtzee
             label14.Visible = false;
             reset.Visible = false;
             reset.Enabled = false;
+            totalScore = 0;
         }
     }
 
